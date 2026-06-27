@@ -75,7 +75,7 @@ TCPSocket* createTcpClient() {
 
     sock->peer_addr.sin_family = AF_INET;
     sock->peer_addr.sin_port = htons((uint16_t)SERVER_PORT);
-    if(inet_pton(AF_INET, SERVER_IP, &addr.sin_addr) <= 0) {
+    if(inet_pton(AF_INET, SERVER_IP, &sock->peer_addr.sin_addr) <= 0) {
         close(sock->sockfd);
         free(sock);
         sock = NULL;
