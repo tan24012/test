@@ -10,7 +10,7 @@ void initTcp(TCPSocket *tcp) {
     tcp->sockfd = -1;
 }
 
-TCPSocket *createTcpServer(uint16_t port, const char *ip) {
+TCPSocket *createTcpServer() {
     TCPSocket *sock = (TCPSocket *)malloc(sizeof(TCPSocket));
     if(!sock) return NULL;
     initTcp(sock);
@@ -20,8 +20,8 @@ TCPSocket *createTcpServer(uint16_t port, const char *ip) {
 
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    if(inet_pton(AF_INET, ip, &addr.sin_addr) <= 0) {
+    addr.sin_port = htons((uint16_t)SERVER_PORT);
+    if(inet_pton(AF_INET, SERVER_IP, &addr.sin_addr) <= 0) {
         close(sock->sockfd);
         free(sock);
         sock = NULL;
