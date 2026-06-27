@@ -59,3 +59,38 @@ TCPSocket *listenAndAccept(TCPSocket *tcp) {
 
     return server;
 }
+
+TCPSocket* createTcpClient() {
+    TCPSocket *sock = (TCPSocket *)malloc(sizeof(TCPSocket));
+    if(!sock) return NULL;
+    initTcp(sock);
+
+    sock->sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if(sock->sockfd < 0) {
+        free(sock);
+        sock = NULL;
+
+        return NULL;
+    }
+
+    sock->peer_addr.sin_family = AF_INET;
+    sock->peer_addr.sin_port = htons((uint16_t)SERVER_PORT);
+    if(inet_pton(AF_INET, SERVER_IP, &addr.sin_addr) <= 0) {
+        close(sock->sockfd);
+        free(sock);
+        sock = NULL;
+
+        return NULL;
+    }
+
+    if(connect(sock->sockfd, (struct sockaddr *)&sock->peer_addr, 
+                sizeof(struct sockaddr_in)) < 0) {
+        close(sock->sockfd);
+        free(sock);
+        sock = NULL;
+
+        return NULL;
+    }
+
+    return sock;
+}
