@@ -11,8 +11,8 @@ typedef struct {
 } TCPSocket;
 
 void initTcp(TCPSocket *tcp);
-TCPSocket *createTcpServer(uint16_t port, const char *ip);
+TCPSocket *createTcpServer();
 TCPSocket *listenAndAccept(TCPSocket *tcp);
-TCPSocket* createTcpClient(char* peerIP, int port);
+TCPSocket* createTcpClient();
 
 #endif
