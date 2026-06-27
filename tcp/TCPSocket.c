@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdlib.h>
+
 #include "TCPSocket.h"
 
 void initTcp(TCPSocket *tcp) {
