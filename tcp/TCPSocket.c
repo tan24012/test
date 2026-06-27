@@ -48,8 +48,8 @@ TCPSocket *listenAndAccept(TCPSocket *tcp) {
     TCPSocket *server = (TCPSocket *)malloc(sizeof(TCPSocket));
     initTcp(server);
 
-    server->sockfd = accept(tcp->sockfd, (struct sockaddr *)&server->peer_addr, 
-                            sizeof(struct sockaddr_in));
+    socklen_t len = sizeof(struct sockaddr_in);
+    server->sockfd = accept(tcp->sockfd, (struct sockaddr *)&server->peer_addr, &len);
     if(server->sockfd < 0) {
         free(server);
         server = NULL;
