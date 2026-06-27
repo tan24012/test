@@ -29,6 +29,9 @@ TCPSocket *createTcpServer() {
         return NULL;
     }
 
+    int opt = 1;
+    setsockopt(sock->sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
     if(bind(sock->sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
         close(sock->sockfd);
         free(sock);
