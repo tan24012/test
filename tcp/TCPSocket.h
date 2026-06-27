@@ -6,12 +6,12 @@
 #include <arpa/inet.h>
 
 typedef struct {
-    struct sockaddr_in addr;
     struct sockaddr_in peer_addr;
     int sockfd;
 } TCPSocket;
 
 void initTcp(TCPSocket *tcp);
+TCPSocket *createTcpServer(uint16_t port, const char *ip);
 TCPSocket *createTcpServer(uint16_t port, const char *ip);
 
 #endif

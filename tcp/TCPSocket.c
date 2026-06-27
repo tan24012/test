@@ -5,7 +5,6 @@
 #include "TCPSocket.h"
 
 void initTcp(TCPSocket *tcp) {
-    memset(&tcp->addr, 0, sizeof(struct sockaddr_in));
     memset(&tcp->peer_addr, 0, sizeof(struct sockaddr_in));
     tcp->sockfd = -1;
 }
@@ -18,9 +17,10 @@ TCPSocket *createTcpServer(uint16_t port, const char *ip) {
     sock->sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sock->sockfd < 0) return NULL;
 
-    sock->addr.sin_family = AF_INET;
-    sock->addr.sin_port = htons(port);
-    if(inet_pton(AF_INET, ip, &sock->addr.sin_addr) <= 0) {
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    if(inet_pton(AF_INET, ip, &addr.sin_addr) <= 0) {
         close(sock->sockfd);
         free(sock);
         sock = NULL;
@@ -28,7 +28,7 @@ TCPSocket *createTcpServer(uint16_t port, const char *ip) {
         return NULL;
     }
 
-    if(bind(sock->sockfd, (struct sockaddr *)&sock->addr, sizeof(sock->addr)) < 0) {
+    if(bind(sock->sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
         close(sock->sockfd);
         free(sock);
         sock = NULL;
