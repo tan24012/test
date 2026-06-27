@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "TCPSocket.h"
+#include "Common.h"
 
 void initTcp(TCPSocket *tcp) {
     memset(&tcp->peer_addr, 0, sizeof(struct sockaddr_in));
@@ -37,4 +38,24 @@ TCPSocket *createTcpServer(uint16_t port, const char *ip) {
     }
 
     return sock;
+}
+
+TCPSocket *listenAndAccept(TCPSocket *tcp) {
+    if(!tcp || (tcp->sockfd < 0)) return NULL;
+
+    if(listen(tcp->sockfd, MAX_CLIENT) < 0) return NULL;
+
+    TCPSocket *server = (TCPSocket *)malloc(sizeof(TCPSocket));
+    initTcp(server);
+
+    server->sockfd = accept(tcp->sockfd, (struct sockaddr *)&server->peer_addr, 
+                            sizeof(struct sockaddr_in));
+    if(server->sockfd < 0) {
+        free(server);
+        server = NULL;
+
+        return NULL;
+    }
+
+    return server;
 }

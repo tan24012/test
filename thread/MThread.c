@@ -17,7 +17,7 @@ void mtInit(MThread *mt) {
 }
 
 int mtStart(MThread *mt) {
-    if(mt->started || !mt->run || !mt->arg) return -1;
+    if(!mt || mt->started || !mt->run || !mt->arg) return -1;
 
     int ret = pthread_create(&mt->thread_ID, NULL, threadEntry, (void *)mt);
     if(!ret) mt->started = true;
@@ -26,7 +26,7 @@ int mtStart(MThread *mt) {
 }
 
 int mtWait(MThread *mt) {
-    if(!mt->started || mt->joined) return -1;
+    if(!mt || !mt->started || mt->joined) return -1;
 
     int ret = pthread_join(mt->thread_ID, NULL);
     if(!ret) mt->joined = true;
