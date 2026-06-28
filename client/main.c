@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdio.h>
+
 #include "Client.h"
 
 int main() {
