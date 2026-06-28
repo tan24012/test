@@ -97,3 +97,23 @@ TCPSocket* createTcpClient() {
 
     return sock;
 }
+
+int sendMsg(int fd, char *msg) {
+    if(fd < 0 || !msg) return 0;
+    
+    uint32_t msgLen = (uint32_t)strlen(msg);
+    uint32_t netMsgLen = htonl(msgLen);
+    uint32_t total = 0;
+
+    if(send(fd, (void *)&netMsgLen, sizeof(uint32_t), 0) <= 0) return 0;
+    
+    while(total < msgLen) {
+        ssize_t numSend = send(fd, (char *)msg + total, msgLen - total, 0);
+
+        if(numSend <= 0) return total;
+
+        total += (uint32_t)numSend;
+    }
+
+    return total;
+}
