@@ -14,6 +14,5 @@ void initTcp(TCPSocket *tcp);
 TCPSocket *createTcpServer();
 TCPSocket *listenAndAccept(TCPSocket *tcp);
 TCPSocket* createTcpClient();
-int sendMsg(int fd, const void *buf, size_t len);
-
+int sendMsg(int fd, char *msg);
 #endif
