@@ -24,8 +24,8 @@ void runListening(void *arg) {
     Server* serv = (Server*)arg;
     atomic_store(&serv->listenStatus, true);
 
-    TCPSocket *listen_sock = createTcpServer();
-    if(!listen_sock) {
+    serv->tcp_server = createTcpServer();
+    if(!serv->tcp_server) {
         atomic_store(&serv->listenStatus, false);
         return;
     }
@@ -33,7 +33,7 @@ void runListening(void *arg) {
 
     while(atomic_load(&serv->listenStatus) == true)
 	{
-		TCPSocket* temp_sock = listenAndAccept(serv->listen_sock);
+		TCPSocket* temp_sock = listenAndAccept(serv->tcp_server);
 
 		if (!temp_sock)
 			continue;
