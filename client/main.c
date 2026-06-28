@@ -7,7 +7,7 @@ int main() {
     Client client;
     initClient(&client);
 
-    char *command;
+    char command[10];
     printf("Enter command\n");  // ?
 
     while(strcmp(command, "close") != 0) {
