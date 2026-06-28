@@ -102,6 +102,10 @@ int sendMsg(int fd, char *msg) {
     if(fd < 0 || !msg) return 0;
     
     uint32_t msgLen = (uint32_t)strlen(msg);
+    if(msgLen >= 100) {
+        printf("too many character\n");
+        return 0;
+    }
     uint32_t netMsgLen = htonl(msgLen);
     uint32_t total = 0;
 
@@ -114,6 +118,29 @@ int sendMsg(int fd, char *msg) {
 
         total += (uint32_t)numSend;
     }
+
+    return total;
+}
+
+int readMsg(int fd, char *msg) {
+    if(fd < 0 || !msg) return 0;
+    
+    uint32_t msgLen;
+    uint32_t hMsgLen;
+    uint32_t total = 0;
+
+    if(recv(fd, (void *)&msgLen, sizeof(uint32_t), 0) <= 0) return 0;
+    hMsgLen = ntohl(msgLen);
+    
+    while(total < hMsgLen) {
+        ssize_t numRead = recv(fd, (char *)msg + total, hMsgLen - total, 0);
+
+        if(numRead <= 0) return total;
+
+        total += (uint32_t)numRead;
+    }
+
+    msg[msgLen] = '\0';
 
     return total;
 }
