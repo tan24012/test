@@ -1,3 +1,4 @@
+#include <stdlib.h>
 
 #include "Client.h"
 
@@ -20,10 +21,10 @@ bool connectToServer(Client* c) {
     c->tcp_client = createTcpClient();
     if(!c->tcp_client) return false;
 
-    atomic_store(&c->isConnected, true);
-    c->mthread->run = runClient;
-    c->mthread->arg = (void *)c;
-    mtStart(c->mthread);
+    // atomic_store(&c->isConnected, true);
+    // c->mthread->run = runClient;
+    // c->mthread->arg = (void *)c;
+    // mtStart(c->mthread);
 
     return true;
 }
